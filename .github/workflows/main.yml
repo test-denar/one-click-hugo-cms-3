@@ -10,18 +10,22 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: '12.x'
+      - name: Waiting for 1 min from the Netlify Preview
+        uses: jakepartusch/wait-for-netlify-action@v1
+        id: waitFor200
+        with:
+          site_name: "practical-allen-be16f3"
+          max_timeout: 60
       - name: Run Lighthouse on urls!
-        uses: treosh/lighthouse-ci-action@netlify
+        uses: treosh/lighthouse-ci-action@next
         with:
           urls: |
             https://practical-allen-be16f3.netlify.com
             https://practical-allen-be16f3.netlify.com/products/
             https://practical-allen-be16f3.netlify.com/contact/
-          logLevel: 'info'
           slackWebhookUrl: ${{ secrets.SLACK_WEBHOOK_URL }}
           applicationGithubToken: ${{ secrets.GITHUB_TOKEN }}
           personalGithubToken: ${{ secrets.GITHUB_TOKEN_PERMISSIONS }}
-          netlifySite: 'practical-allen-be16f3.netlify.com'
           budgetPath: '.github/budget.json'
           notifications: |
             slack
